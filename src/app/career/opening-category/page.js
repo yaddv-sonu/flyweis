@@ -12,7 +12,7 @@ export default function CareerOpeningCategory() {
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
-  const [allCategories, setAllCategories] = useState([]); // Store all categories
+  const [allCategories, setAllCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editCategoryId, setEditCategoryId] = useState(null);
@@ -326,7 +326,7 @@ export default function CareerOpeningCategory() {
               &lt;
             </button>
             <div className="flex items-center gap-1">
-              {[...Array(totalPages)].map((_, idx) => (
+              {[...Array(totalPages)].map((item, idx) => (
                 <button
                   key={idx + 1}
                   onClick={() => setPage(idx + 1)}

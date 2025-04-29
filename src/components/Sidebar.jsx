@@ -49,20 +49,22 @@ const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Determine active item from current path
   const getActiveItem = () => {
     const found = menuItems.find(item => {
-      if (item.hasSubmenu && item.title === 'Blog') {
-        return blogSubmenu.some(sub => sub.path === pathname);
+      if (item.hasSubmenu) {
+        if (item.title === 'Blog') {
+          return blogSubmenu.some(sub => sub.path === pathname);
+        }
+        if (item.title === 'Career') {
+          return careerSubmenu.some(sub => sub.path === pathname);
+        }
       }
       return item.path === pathname;
     });
-    if (found) return found.title;
-    return 'Dashboard';
+    return found ? found.title : 'Dashboard';
   };
   const [activeItem, setActiveItem] = useState(getActiveItem());
 
-  // Update active item on route change
   useEffect(() => {
     setActiveItem(getActiveItem());
   }, [pathname]);

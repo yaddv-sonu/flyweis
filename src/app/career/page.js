@@ -326,7 +326,7 @@ export default function CareerPage() {
             </button>
             {/* Page Numbers */}
             <div className="flex items-center gap-1">
-              {[...Array(totalPages)].map((_, idx) => (
+              {[...Array(totalPages)].map((item, idx) => (
                 <button
                   key={idx + 1}
                   onClick={() => setPage(idx + 1)}

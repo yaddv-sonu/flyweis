@@ -299,8 +299,10 @@ export default function AutoDealership() {
         </table>
         {/* Pagination */}
         <div className="p-4 border-t flex items-center justify-between text-sm text-gray-600">
-          <div>Showing {(page - 1) * limit + 1}-{Math.min(page * limit, totalCount)} of {totalCount}</div>
-          <div className="flex gap-2">
+          <div>
+            Showing {dealers.length > 0 ? (page - 1) * limit + 1 : 0}-{Math.min(page * limit, totalCount)} of {totalCount}
+          </div>
+          <div className="flex items-center gap-2">
             <button 
               onClick={() => setPage(prev => Math.max(1, prev - 1))}
               disabled={page === 1}
@@ -308,8 +310,24 @@ export default function AutoDealership() {
             >
               &lt;
             </button>
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1">
+              {[...Array(Math.ceil(totalCount / limit))].map((item, idx) => (
+                <button
+                  key={idx + 1}
+                  onClick={() => setPage(idx + 1)}
+                  className={`w-8 h-8 rounded-lg ${
+                    page === idx + 1
+                      ? 'bg-[#23A8B0] text-white'
+                      : 'hover:bg-gray-100'
+                  }`}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
             <button 
-              onClick={() => setPage(prev => prev + 1)}
+              onClick={() => setPage(prev => Math.min(Math.ceil(totalCount / limit), prev + 1))}
               disabled={page * limit >= totalCount}
               className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50"
             >

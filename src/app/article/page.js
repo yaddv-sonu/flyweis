@@ -10,7 +10,7 @@ export default function Article() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -47,7 +47,7 @@ export default function Article() {
       
       // Update pagination state if needed
       setPage(responseData?.data?.page || 1);
-      setLimit(responseData?.data?.limit || 12);
+      setLimit(responseData?.data?.limit || 5);
     } catch (err) {
       console.error('Fetch error:', err);
       setError(err.message);
@@ -315,19 +315,39 @@ export default function Article() {
         
         {/* Pagination */}
         <div className="p-4 border-t flex items-center justify-between text-sm text-gray-600">
-          <div>Showing {(page - 1) * limit + 1}-{Math.min(page * limit, totalCount)} of {totalCount}</div>
-          <div className="flex gap-2">
+          <div>
+            Showing {articles.length > 0 ? (page - 1) * limit + 1 : 0}-{Math.min(page * limit, totalCount)} of {totalCount}
+          </div>
+          <div className="flex items-center gap-2">
             <button 
               onClick={() => setPage(prev => Math.max(1, prev - 1))}
               disabled={page === 1}
-              className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50"
+              className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               &lt;
             </button>
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.ceil(totalCount / limit) }, (item, i) => i + 1)
+                .slice(Math.max(0, page - 3), Math.min(Math.ceil(totalCount / limit), page + 2))
+                .map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className={`w-8 h-8 rounded-lg ${
+                      page === pageNum
+                        ? 'bg-[#23A8B0] text-white'
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+            </div>
             <button 
-              onClick={() => setPage(prev => prev + 1)}
+              onClick={() => setPage(prev => Math.min(Math.ceil(totalCount / limit), prev + 1))}
               disabled={page * limit >= totalCount}
-              className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50"
+              className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               &gt;
             </button>
